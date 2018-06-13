@@ -31,6 +31,8 @@ static os_stack_t native_timer_stack[NATIVE_TIMER_STACK_SIZE];
 static struct os_task native_timer_task_struct;
 static struct os_eventq native_timer_evq;
 
+#define NATIVE_MAX_TIMERS	(2)
+
 struct native_timer {
     struct os_callout callout;
     uint32_t ticks_per_ostick;
@@ -38,7 +40,7 @@ struct native_timer {
     uint32_t last_ostime;
     int num;
     TAILQ_HEAD(hal_timer_qhead, hal_timer) timers;
-} native_timers[1];
+} native_timers[NATIVE_MAX_TIMERS];
 
 /**
  * This is the function called when the timer fires.
@@ -91,7 +93,7 @@ hal_timer_config(int num, uint32_t clock_freq)
 {
     struct native_timer *nt;
 
-    if (num != 0) {
+    if (num >= NATIVE_MAX_TIMERS) {
         return -1;
     }
     nt = &native_timers[num];

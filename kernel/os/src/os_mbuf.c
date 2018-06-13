@@ -266,6 +266,7 @@ os_mbuf_get(struct os_mbuf_pool *omp, uint16_t leadingspace)
     om->om_len = 0;
     om->om_data = (&om->om_databuf[0] + leadingspace);
     om->om_omp = omp;
+    //printf("MBUF get %p\n", om);
 
 done:
     os_trace_api_ret_u32(OS_TRACE_ID_MBUF_GET, (uint32_t)om);
@@ -309,6 +310,7 @@ int
 os_mbuf_free(struct os_mbuf *om)
 {
     int rc;
+    //printf("MBUF free %p\n", om);
 
     os_trace_api_u32(OS_TRACE_ID_MBUF_FREE, (uint32_t)om);
 
