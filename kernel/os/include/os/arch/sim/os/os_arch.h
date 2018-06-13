@@ -6,7 +6,7 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
@@ -64,7 +64,7 @@ typedef unsigned int os_stack_t;
 #define OS_ENTER_CRITICAL(__os_sr) (__os_sr = os_arch_save_sr())
 /* Exit a critical section, restore processor state and unblock interrupts */
 #define OS_EXIT_CRITICAL(__os_sr) (os_arch_restore_sr(__os_sr))
-#define OS_ASSERT_CRITICAL() (assert(os_arch_in_critical()))
+#define OS_ASSERT_CRITICAL()
 
 void _Die(char *file, int line);
 
