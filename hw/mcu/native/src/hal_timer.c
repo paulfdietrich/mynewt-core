@@ -25,11 +25,12 @@
 /*
  * For native cpu implementation.
  */
-static uint8_t native_timer_task_started;
 #define NATIVE_TIMER_STACK_SIZE   (1024)
 static os_stack_t native_timer_stack[NATIVE_TIMER_STACK_SIZE];
 static struct os_task native_timer_task_struct;
 static struct os_eventq native_timer_evq;
+
+#define NATIVE_MAX_TIMERS	(2)
 
 struct native_timer {
     struct os_callout callout;
@@ -38,7 +39,7 @@ struct native_timer {
     uint32_t last_ostime;
     int num;
     TAILQ_HEAD(hal_timer_qhead, hal_timer) timers;
-} native_timers[1];
+} native_timers[NATIVE_MAX_TIMERS];
 
 /**
  * This is the function called when the timer fires.
@@ -80,6 +81,16 @@ native_timer_task(void *arg)
     }
 }
 
+void
+native_timer_init(void) {
+    os_task_init(&native_timer_task_struct, "native_timer",
+      native_timer_task, NULL, OS_TASK_PRI_HIGHEST, OS_WAIT_FOREVER,
+      native_timer_stack, NATIVE_TIMER_STACK_SIZE);
+
+    /* Initialize the eventq and task */
+    os_eventq_init(&native_timer_evq);
+}
+
 int
 hal_timer_init(int num, void *cfg)
 {
@@ -91,7 +102,7 @@ hal_timer_config(int num, uint32_t clock_freq)
 {
     struct native_timer *nt;
 
-    if (num != 0) {
+    if (num >= NATIVE_MAX_TIMERS) {
         return -1;
     }
     nt = &native_timers[num];
@@ -104,15 +115,6 @@ hal_timer_config(int num, uint32_t clock_freq)
     nt->num = num;
     nt->cnt = 0;
     nt->last_ostime = os_time_get();
-    if (!native_timer_task_started) {
-        os_task_init(&native_timer_task_struct, "native_timer",
-          native_timer_task, NULL, OS_TASK_PRI_HIGHEST, OS_WAIT_FOREVER,
-          native_timer_stack, NATIVE_TIMER_STACK_SIZE);
-
-        /* Initialize the eventq and task */
-        os_eventq_init(&native_timer_evq);
-        native_timer_task_started = 1;
-    }
 
     /* Initialize the callout function */
     os_callout_init(&nt->callout, &native_timer_evq, native_timer_cb, nt);
