@@ -83,12 +83,13 @@ native_timer_task(void *arg)
 
 void
 native_timer_init(void) {
+    /* Initialize the eventq and task */
+    os_eventq_init(&native_timer_evq);
+
     os_task_init(&native_timer_task_struct, "native_timer",
       native_timer_task, NULL, MYNEWT_VAL(MCU_NATIVE_TIMER_PRIO),
       OS_WAIT_FOREVER, native_timer_stack, NATIVE_TIMER_STACK_SIZE);
 
-    /* Initialize the eventq and task */
-    os_eventq_init(&native_timer_evq);
 }
 
 int

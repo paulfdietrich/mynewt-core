@@ -42,7 +42,8 @@ static int
 log_stdout_append_body(struct log *log, const struct log_entry_hdr *hdr,
                         const void *body, int body_len)
 {
-
+    printf("[ts=%llu, mod=%u level=%u] ",
+            hdr->ue_ts, hdr->ue_module, hdr->ue_level);
 
     fwrite(body, body_len, 1, stdout);
     return (0);
