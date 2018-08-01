@@ -6,7 +6,7 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
@@ -23,7 +23,7 @@
 extern "C" {
 #endif
 
-#define OS_TICKS_PER_SEC    (100)
+#define OS_TICKS_PER_SEC    (500)
 
 extern char *native_flash_file;
 extern char *native_uart_log_file;
