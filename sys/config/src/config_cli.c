@@ -30,7 +30,7 @@
 #include <shell/shell.h>
 #include <console/console.h>
 
-static int shell_conf_command(int argc, char **argv);
+int shell_conf_command(int argc, char **argv);
 
 static struct shell_cmd shell_conf_cmd = {
     .sc_cmd = "config",
@@ -83,7 +83,7 @@ conf_dump_saved(void)
 }
 #endif
 
-static int
+int
 shell_conf_command(int argc, char **argv)
 {
 #if MYNEWT_VAL(CONFIG_CLI_RW)
