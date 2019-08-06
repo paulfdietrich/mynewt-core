@@ -3006,10 +3006,11 @@ lis2dw12_sensor_handle_interrupt(struct sensor *sensor)
     lis2dw12 = (struct lis2dw12 *)SENSOR_GET_DEVICE(sensor);
     itf = SENSOR_GET_ITF(sensor);
 
-    if (lis2dw12->pdd.notify_ctx.snec_evtype & SENSOR_EVENT_TYPE_SLEEP) {
+    if (lis2dw12->pdd.notify_ctx.snec_evtype & (SENSOR_EVENT_TYPE_SLEEP |
+                                            SENSOR_EVENT_TYPE_FIFO_THRESH)) {
         /*
          * We need to read this register only if we are
-         * interested in the sleep event
+         * interested in the sleep event or fifo event
          */
         rc = lis2dw12_get_int_status(itf, &int_status);
         if (rc) {
@@ -3025,7 +3026,7 @@ lis2dw12_sensor_handle_interrupt(struct sensor *sensor)
 
     /* TODO not sure why we don't get FIFO Threshold
      * here, so   force one for now */
-    rc = lis2dw12_notify(lis2dw12, 0x80, SENSOR_EVENT_TYPE_FIFO_THRESH);
+    rc = lis2dw12_notify(lis2dw12, int_status, SENSOR_EVENT_TYPE_FIFO_THRESH);
     if (rc) {
         goto err;
     }
