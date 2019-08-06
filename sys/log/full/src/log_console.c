@@ -58,7 +58,23 @@ log_console_append_body(struct log *log, const struct log_entry_hdr *hdr,
         log_console_print_hdr(hdr);
     }
 
-    console_write(body, body_len);
+#if MYNEWT_VAL(LOG_VERSION) == 3
+    if(hdr->ue_etype == LOG_ETYPE_BINARY) {
+        /* print binary console logs as ascii */
+        int i;
+        char *ptr = body;
+        char byte_str[6]; /* extra long */
+        for(i = 0; i < body_len; i++) {
+            sprintf(byte_str, "%02x", (uint8_t) ptr[i]);
+            console_write((char *) byte_str, 2);
+        }
+        byte_str[0] = '\n';
+        console_write((char *) byte_str, 1);
+    } else
+#endif
+    {
+        console_write(body, body_len);
+    }
 
     return (0);
 }

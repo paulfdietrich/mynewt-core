@@ -35,8 +35,8 @@
 extern "C" {
 #endif
 
-/**  
- * @defgroup SensorAPI 
+/**
+ * @defgroup SensorAPI
  * @{
  */
 
@@ -136,6 +136,8 @@ typedef enum {
     SENSOR_EVENT_TYPE_ORIENT_Y_H_CHANGE  = (1 << 14),
     /* Orientation Change Event in the Z H direction */
     SENSOR_EVENT_TYPE_ORIENT_Z_H_CHANGE  = (1 << 15),
+    /* sensor data fifo has reached the threshold */
+    SENSOR_EVENT_TYPE_FIFO_THRESH = (1 << 16),
 } sensor_event_type_t;
 
 

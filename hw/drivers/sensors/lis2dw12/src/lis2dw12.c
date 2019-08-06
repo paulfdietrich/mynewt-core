@@ -124,6 +124,12 @@ const struct lis2dw12_notif_cfg dflt_notif_cfg[] = {
       .int_num   = 0,
       .notif_src = LIS2DW12_SIXD_SRC_ZH,
       .int_cfg   = LIS2DW12_INT1_CFG_6D
+    },
+    {
+      .event     = SENSOR_EVENT_TYPE_FIFO_THRESH,
+      .int_num   = 0,
+      .notif_src = LIS2DW12_STATUS_FIFO_THS,
+      .int_cfg   = LIS2DW12_INT1_CFG_FTH
     }
 
 };
@@ -155,6 +161,7 @@ STATS_SECT_START(lis2dw12_stat_section)
     STATS_SECT_ENTRY(orient_chg_x_h_notify)
     STATS_SECT_ENTRY(orient_chg_y_h_notify)
     STATS_SECT_ENTRY(orient_chg_z_h_notify)
+    STATS_SECT_ENTRY(fifo_thresh_notify)
 #endif
 STATS_SECT_END
 
@@ -176,6 +183,7 @@ STATS_NAME_START(lis2dw12_stat_section)
     STATS_NAME(lis2dw12_stat_section, orient_chg_x_h_notify)
     STATS_NAME(lis2dw12_stat_section, orient_chg_y_h_notify)
     STATS_NAME(lis2dw12_stat_section, orient_chg_z_h_notify)
+    STATS_NAME(lis2dw12_stat_section, fifo_thresh_notify)
 #endif
 STATS_NAME_END(lis2dw12_stat_section)
 
@@ -2955,6 +2963,9 @@ lis2dw12_inc_notif_stats(sensor_event_type_t event)
         case SENSOR_EVENT_TYPE_FREE_FALL:
             STATS_INC(g_lis2dw12stats, free_fall_notify);
             break;
+        case SENSOR_EVENT_TYPE_FIFO_THRESH:
+            STATS_INC(g_lis2dw12stats, fifo_thresh_notify);
+            break;
         default:
             break;
     }
@@ -3010,6 +3021,13 @@ lis2dw12_sensor_handle_interrupt(struct sensor *sensor)
         if (rc) {
             goto err;
         }
+    }
+
+    /* TODO not sure why we don't get FIFO Threshold
+     * here, so   force one for now */
+    rc = lis2dw12_notify(lis2dw12, 0x80, SENSOR_EVENT_TYPE_FIFO_THRESH);
+    if (rc) {
+        goto err;
     }
 
     rc = lis2dw12_get_sixd_src(itf, &sixd_src);

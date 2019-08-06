@@ -80,6 +80,7 @@ extern "C" {
 #define LIS2DW12_INT2_CFG_SLEEP_CHG             0x40
 #define LIS2DW12_INT2_CFG_SLEEP_STATE           0x80
 
+#define LIS2DW12_INT_SRC_FIFO_THRESH            0x40
 #define LIS2DW12_INT_SRC_SLP_CHG                0x20
 #define LIS2DW12_INT_SRC_6D_IA                  0x10
 #define LIS2DW12_INT_SRC_DTAP                   0x08
@@ -153,7 +154,7 @@ enum lis2dw12_read_mode {
 struct lis2dw12_notif_cfg {
     sensor_event_type_t event;
     uint8_t int_num:1;
-    uint8_t notif_src:7;
+    uint8_t notif_src;
     uint8_t int_cfg;
 };
 
