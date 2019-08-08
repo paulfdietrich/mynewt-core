@@ -41,6 +41,8 @@
 #include "tinycbor/compilersupport_p.h"
 #endif
 
+#include "hal/hal_watchdog.h"
+
 #if MYNEWT_VAL(LOG_VERSION) > 2
 struct log_shell_cbor_reader {
     struct cbor_decoder_reader r;
@@ -175,6 +177,9 @@ shell_log_dump_entry(struct log *log, struct log_offset *log_offset,
         }
         data[rc] = 0;
     }
+
+    /* tickle the watchdog for super long log displays */
+    hal_watchdog_tickle();
 
     console_printf("[%llu] ", ueh->ue_ts);
 
