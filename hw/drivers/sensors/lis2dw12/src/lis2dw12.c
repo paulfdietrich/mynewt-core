@@ -3024,8 +3024,6 @@ lis2dw12_sensor_handle_interrupt(struct sensor *sensor)
         }
     }
 
-    /* TODO not sure why we don't get FIFO Threshold
-     * here, so   force one for now */
     rc = lis2dw12_notify(lis2dw12, int_status, SENSOR_EVENT_TYPE_FIFO_THRESH);
     if (rc) {
         goto err;
