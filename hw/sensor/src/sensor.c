@@ -643,8 +643,6 @@ sensor_mgr_evq_set(struct os_eventq *evq)
     sensor_mgr.mgr_eventq = evq;
 }
 
-extern struct os_eventq *g_psensorEvq;
-
 static void
 sensor_mgr_init(void)
 {

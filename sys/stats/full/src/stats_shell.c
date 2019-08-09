@@ -6,7 +6,7 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
@@ -29,7 +29,7 @@
 #include "streamer/streamer.h"
 #include "stats/stats.h"
 
-static int shell_stats_display(const struct shell_cmd *cmd,
+int shell_stats_display(const struct shell_cmd *cmd,
                                int argc, char **argv,
                                struct streamer *streamer);
 
@@ -38,7 +38,7 @@ static struct shell_cmd shell_stats_cmd =
 
 uint8_t stats_shell_registered;
 
-static int 
+static int
 stats_shell_display_entry(struct stats_hdr *hdr, void *arg, char *name,
         uint16_t stat_off)
 {
@@ -62,7 +62,7 @@ stats_shell_display_entry(struct stats_hdr *hdr, void *arg, char *name,
                     *(uint64_t *) stat_val);
             break;
         default:
-            streamer_printf(streamer, "Unknown stat size for %s %u\n", name, 
+            streamer_printf(streamer, "Unknown stat size for %s %u\n", name,
                     hdr->s_size);
             break;
     }
@@ -70,7 +70,7 @@ stats_shell_display_entry(struct stats_hdr *hdr, void *arg, char *name,
     return (0);
 }
 
-static int 
+static int
 stats_shell_display_group(struct stats_hdr *hdr, void *arg)
 {
     struct streamer *streamer;
@@ -80,7 +80,7 @@ stats_shell_display_group(struct stats_hdr *hdr, void *arg)
     return (0);
 }
 
-static int
+int
 shell_stats_display(const struct shell_cmd *cmd, int argc, char **argv,
                     struct streamer *streamer)
 {
@@ -115,7 +115,7 @@ err:
 }
 
 
-int 
+int
 stats_shell_register(void)
 {
     if (!stats_shell_registered) {
