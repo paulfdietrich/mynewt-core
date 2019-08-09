@@ -6,7 +6,7 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *  http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
@@ -29,14 +29,14 @@
 #include "console/console.h"
 #include "stats/stats.h"
 
-static int shell_stats_display(int argc, char **argv);
+int shell_stats_display(int argc, char **argv);
 static struct shell_cmd shell_stats_cmd = {
     .sc_cmd = "stat",
     .sc_cmd_func = shell_stats_display
 };
 uint8_t stats_shell_registered;
 
-static int 
+static int
 stats_shell_display_entry(struct stats_hdr *hdr, void *arg, char *name,
         uint16_t stat_off)
 {
@@ -54,7 +54,7 @@ stats_shell_display_entry(struct stats_hdr *hdr, void *arg, char *name,
             console_printf("%s: %llu\n", name, *(uint64_t *) stat_val);
             break;
         default:
-            console_printf("Unknown stat size for %s %u\n", name, 
+            console_printf("Unknown stat size for %s %u\n", name,
                     hdr->s_size);
             break;
     }
@@ -62,14 +62,14 @@ stats_shell_display_entry(struct stats_hdr *hdr, void *arg, char *name,
     return (0);
 }
 
-static int 
+static int
 stats_shell_display_group(struct stats_hdr *hdr, void *arg)
 {
     console_printf("\t%s\n", hdr->s_name);
     return (0);
 }
 
-static int
+int
 shell_stats_display(int argc, char **argv)
 {
     struct stats_hdr *hdr;
@@ -103,7 +103,7 @@ err:
 }
 
 
-int 
+int
 stats_shell_register(void)
 {
     if (!stats_shell_registered) {
