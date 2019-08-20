@@ -199,7 +199,7 @@ static const struct bus_spi_dev_cfg spi2_cfg = {
     .pin_mosi = MYNEWT_VAL(SPI_2_MASTER_PIN_MOSI),
     .pin_miso = MYNEWT_VAL(SPI_2_MASTER_PIN_MISO),
 };
-static struct bus_spi_dev spi2_bus;
+static struct bus_spi_hal_dev spi2_bus;
 #else
 static const struct nrf52_hal_spi_cfg os_bsp_spi2m_cfg = {
     .sck_pin      = MYNEWT_VAL(SPI_2_MASTER_PIN_SCK),
