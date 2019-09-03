@@ -180,7 +180,6 @@ shell_log_dump_entry(struct log *log, struct log_offset *log_offset,
         data[rc] = 0;
     }
 
-<<<<<<< 0cdc16301750f78f97f124235739e5b0d73e7070
     /* tickle the watchdog for super long log displays */
     hal_watchdog_tickle();
     if (read_hash) {

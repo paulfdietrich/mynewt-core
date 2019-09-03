@@ -62,7 +62,7 @@ log_console_append_body(struct log *log, const struct log_entry_hdr *hdr,
     if(hdr->ue_etype == LOG_ETYPE_BINARY) {
         /* print binary console logs as ascii */
         int i;
-        char *ptr = body;
+        const char *ptr = body;
         char byte_str[6]; /* extra long */
         for(i = 0; i < body_len; i++) {
             sprintf(byte_str, "%02x", (uint8_t) ptr[i]);
