@@ -62,11 +62,21 @@ extern "C" {
 #define NRFX_ASSERT(expression) assert(expression)
 
 /**
- * @brief Macro for placing a compile time assertion.
+ * @brief Macro for placing a compile time assertion
  *
- * @param expression  Expression to evaluate.
+ * @param expresion to evaluate
  */
-#define NRFX_STATIC_ASSERT(expression) STATIC_ASSERT(expression)
+#define NRFX_STATIC_ASSERT(expression) _Static_assert(expression, "Compile Time Error")
+
+//------------------------------------------------------------------------------
+
+#define NRFX_ATOMIC_FETCH_AND(p_data, value) \
+    {                                           \
+        int sr;                                 \
+        OS_ENTER_CRITICAL(sr);                  \
+        *p_data &= value;                       \
+        OS_EXIT_CRITICAL(sr);                   \
+    }
 
 //------------------------------------------------------------------------------
 
