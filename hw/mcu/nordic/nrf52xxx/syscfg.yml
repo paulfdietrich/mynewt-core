@@ -50,6 +50,7 @@ syscfg.defs:
             - LFRC      # 32.768 kHz RC oscillator
             - LFXO      # 32.768 kHz crystal oscillator
             - LFSYNTH   # 32.768 kHz synthesized from HFCLK
+            - LFEXTOSC   # 32.768 kHz external rail to rail oscillator
 
     MCU_I2C_RECOVERY_DELAY_USEC:
         description: >

@@ -78,6 +78,7 @@ hal_system_clock_start(void)
     uint32_t regmsk;
     uint32_t regval;
     uint32_t clksrc;
+    uint32_t bypass = 0;
 
     regmsk = CLOCK_LFCLKSTAT_STATE_Msk | CLOCK_LFCLKSTAT_SRC_Msk;
     regval = CLOCK_LFCLKSTAT_STATE_Running << CLOCK_LFCLKSTAT_STATE_Pos;
@@ -91,6 +92,11 @@ hal_system_clock_start(void)
 #elif MYNEWT_VAL_CHOICE(MCU_LFCLK_SOURCE, LFRC)
     regval |= CLOCK_LFCLKSTAT_SRC_RC << CLOCK_LFCLKSTAT_SRC_Pos;
     clksrc = CLOCK_LFCLKSRC_SRC_RC;
+#elif MYNEWT_VAL_CHOICE(MCU_LFCLK_SOURCE, LFEXTOSC)
+    regval |= CLOCK_LFCLKSTAT_SRC_Xtal << CLOCK_LFCLKSTAT_SRC_Pos;
+    clksrc = CLOCK_LFCLKSRC_SRC_Xtal;
+    bypass |= CLOCK_LFCLKSRC_EXTERNAL_Enabled << CLOCK_LFCLKSRC_EXTERNAL_Pos;
+    bypass |= CLOCK_LFCLKSRC_BYPASS_Enabled << CLOCK_LFCLKSRC_BYPASS_Pos;
 #else
     #error Unknown LFCLK source selected
 #endif
@@ -109,19 +115,16 @@ hal_system_clock_start(void)
     }
 #endif
 
-    /* Check if this clock source is already running */
-    if ((NRF_CLOCK->LFCLKSTAT & regmsk) != regval) {
-        NRF_CLOCK->TASKS_LFCLKSTOP = 1;
-        NRF_CLOCK->EVENTS_LFCLKSTARTED = 0;
-        NRF_CLOCK->LFCLKSRC = clksrc;
-        NRF_CLOCK->TASKS_LFCLKSTART = 1;
+    NRF_CLOCK->TASKS_LFCLKSTOP = 1;
+    NRF_CLOCK->EVENTS_LFCLKSTARTED = 0;
+    NRF_CLOCK->LFCLKSRC = (clksrc | bypass);
+    NRF_CLOCK->TASKS_LFCLKSTART = 1;
 
-        /* Wait here till started! */
-        while (1) {
-            if (NRF_CLOCK->EVENTS_LFCLKSTARTED) {
-                if ((NRF_CLOCK->LFCLKSTAT & regmsk) == regval) {
-                    break;
-                }
+    /* Wait here till started! */
+    while (1) {
+        if (NRF_CLOCK->EVENTS_LFCLKSTARTED) {
+            if ((NRF_CLOCK->LFCLKSTAT & regmsk) == regval) {
+                break;
             }
         }
     }
